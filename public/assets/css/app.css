@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 64rem; /* Equivalent to Tailwind's max-w-4xl */
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem; /* Equivalent to Tailwind's gap-10 */
+    margin: 5rem auto; /* Equivalent to Tailwind's my-20 and lg:mx-auto */
+    padding: 0 2.5rem; /* Equivalent to Tailwind's mx-10 */
+}
+
+.main-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+.image-gallery {
+    overflow-x: auto;
+}
+
+.image-wrapper {
+    display: flex;
+    gap: 1rem; /* Equivalent to Tailwind's space-x-4 */
+}
+
+.gallery-image {
+    width: 21.25rem; /* Equivalent to Tailwind's w-[340px] */
+    height: 12.5rem; /* Equivalent to Tailwind's h-[200px] */
+    border-radius: 0.5rem; /* Equivalent to Tailwind's rounded-lg */
+    object-fit: cover; /* Equivalent to Tailwind's object-cover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Equivalent to Tailwind's shadow-md */
+}
+
+.content-header {
+    display: flex;
+    flex-direction: column;
+}
+
+.content-title {
+    font-size: 1.5rem; /* Equivalent to Tailwind's text-2xl */
+    font-weight: bold;
+}
+
+.content-date {
+    font-size: 1rem; /* Equivalent to Tailwind's text-md */
+}
+
+.content-description {
+    text-align: justify;
+}
