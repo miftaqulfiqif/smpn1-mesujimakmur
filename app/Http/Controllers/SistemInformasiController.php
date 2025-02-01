@@ -32,13 +32,15 @@ class SistemInformasiController extends Controller
 
         // set periode non aktif
         $periode = PeriodeDaftar::where('status', 1)->first();
-        $currentDate = Carbon::now()->format('Y-m-d');
-        $periodeEnd = $periode->end_date;
+        if ($periode) {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $periodeEnd = $periode->end_date;
 
-        if ($currentDate > $periodeEnd) {
-            $periode->update([
-                'status' => 0
-            ]);
+            if ($currentDate > $periodeEnd) {
+                $periode->update([
+                    'status' => 0
+                ]);
+            }
         }
 
         return view('home', compact('moto', 'fotoSekolah', 'visi', 'misi', 'prestasis', 'informasis', 'mainInformation'));
