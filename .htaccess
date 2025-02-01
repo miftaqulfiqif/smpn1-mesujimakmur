@@ -2,14 +2,18 @@
 Options +FollowSymLinks
 RewriteEngine On
 
+# Mengizinkan akses langsung ke folder storage tanpa perlu storage:link
+RewriteCond %{REQUEST_URI} ^/storage/(.*)$
+RewriteRule ^storage/(.*)$ public/storage/$1 [L]
+
+# Redirect semua request kecuali yang menuju public/
 RewriteCond %{REQUEST_URI} !^/public/ 
 
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 
-
-
 RewriteRule ^(.*)$ /public/$1 
-#RewriteRule ^ index.php [L]
+
+# Jika tidak ada file yang cocok, alihkan ke index.php Laravel
 RewriteRule ^(/)?$ public/index.php [L] 
 </IfModule>
