@@ -14,14 +14,17 @@ use App\Models\PeringkatCalonSiswaAfirmasi;
 use App\Models\PeringkatCalonSiswaPrestasi;
 use App\Models\PeriodeDaftar;
 use App\Models\StatusPendaftaran;
+use Barryvdh\DomPDF\Facade\PDF;
 use Carbon\Carbon;
 use Filament\Notifications\Notification;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Exists;
 
 use function Ramsey\Uuid\v1;
@@ -200,28 +203,32 @@ class PpdbController extends Controller
         return view('ppdb.pendaftaran.upload-document-afirmasi', compact('calonSiswa', 'data', 'documents'));
     }
 
-    public function saveBiodataSiswa(Request $request)
+    public function saveBiodataSiswa(Request $request): RedirectResponse
     {
         $user = Auth::user();
 
         $existingData = DataCalonSiswa::where('id_user', $user->id)->first();
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'required|string',
             'tgl_lahir' => 'required|date',
-            'nik' => 'required|string|max:16',
+            'nik' => 'required|numeric|max_digits:16',
             'asal_sekolah' => 'required|string',
             'alamat' => 'required|string',
-            'tinggi_badan' => 'required|string',
-            'berat_badan' => 'required|string',
+            'tinggi_badan' => 'required|numeric',
+            'berat_badan' => 'required|numeric',
             'kegemaran' => 'required|string',
             'penerima_kip' => 'required|in:1,0',
-            'nomor_kip' => 'nullable|string',
+            'nomor_kip' => 'nullable|numeric',
             'foto' => $existingData ? 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' : 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'foto_lama' => 'nullable|string',
-            'notelp' => 'required|string',
+            'notelp' => 'required|numeric',
         ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        };
 
         DB::beginTransaction();
         try {
@@ -312,21 +319,25 @@ class PpdbController extends Controller
     public function saveBiodataOrangtua(Request $request)
     {
 
-        $request->validate([
+        $validate = Validator::make($request->all(), [
             'id_data_calon_siswa' => 'required|exists:data_calon_siswas,id',
             'nama_ayah' => 'required|string',
-            'nik_ayah' => 'required|string',
+            'nik_ayah' => 'required|numeric|max_digits:16',
             'tgl_lahir_ayah' => 'required|date',
             'pekerjaan_ayah' => 'required|string',
             'pendidikan_ayah' => 'required|string',
-            'penghasilan_ayah' => 'required|string',
+            'penghasilan_ayah' => 'required|numeric',
             'nama_ibu' => 'required|string',
-            'nik_ibu' => 'required|string',
+            'nik_ibu' => 'required|numeric|max_digits:16',
             'tgl_lahir_ibu' => 'required|date',
             'pekerjaan_ibu' => 'required|string',
             'pendidikan_ibu' => 'required|string',
-            'penghasilan_ibu' => 'required|string',
+            'penghasilan_ibu' => 'required|numeric',
         ]);
+
+        if ($validate->fails()) {
+            return back()->withErrors($validate)->withInput();
+        };
 
         Log::info('Request data:', $request->all());
 
@@ -381,7 +392,7 @@ class PpdbController extends Controller
 
     public function saveNilai(Request $request)
     {
-        $request->validate([
+        $validate = Validator::make($request->all(), [
             'id_data_calon_siswa' => 'required|exists:data_calon_siswas,id',
             'semester_ganjil_kelas_4' => 'required|numeric',
             'semester_genap_kelas_4' => 'required|numeric',
@@ -389,6 +400,10 @@ class PpdbController extends Controller
             'semester_genap_kelas_5' => 'required|numeric',
             'semester_ganjil_kelas_6' => 'required|numeric',
         ]);
+
+        if ($validate->fails()) {
+            return back()->withErrors($validate)->withInput();
+        }
 
         DB::beginTransaction();
 
@@ -465,7 +480,7 @@ class PpdbController extends Controller
         foreach ($documents as $document) {
             if ($document->isRequired && (!isset($uploadedFiles[$document->id]) || !$uploadedFiles[$document->id]->isValid())) {
                 $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
+                    ->where('dokumen_id', $document->id)
                     ->first();
 
                 if (!$existingDocument) {
@@ -490,7 +505,7 @@ class PpdbController extends Controller
                 }
 
                 $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
+                    ->where('dokumen_id', $document->id)
                     ->first();
 
                 if ($existingDocument) {
@@ -500,7 +515,8 @@ class PpdbController extends Controller
                 } else if ($newFilePath) {
                     DokumenCalonSiswa::create([
                         'id_data_calon_siswa' => $calonSiswa->id,
-                        'id_dokumen' => $document->id,
+                        'dokumen_id' => $document->id,
+                        'document_type' => 'zonasi',
                         'nama_dokumen' => $document->nama ?? '',
                         'path_url' => $newFilePath
                     ]);
@@ -532,6 +548,7 @@ class PpdbController extends Controller
                 ->with('success', 'Dokumen berhasil tersimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
+            dd($e->getMessage());
             Log::error('Error saving document', ['error' => $e->getMessage()]);
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan dokumen.']);
         }
@@ -553,7 +570,7 @@ class PpdbController extends Controller
         foreach ($documents as $document) {
             if ($document->isRequired && (!isset($uploadedFiles[$document->id]) || !$uploadedFiles[$document->id]->isValid())) {
                 $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
+                    ->where('dokumen_id', $document->id)
                     ->first();
 
                 if (!$existingDocument) {
@@ -578,7 +595,7 @@ class PpdbController extends Controller
                 }
 
                 $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
+                    ->where('dokumen_id', $document->id)
                     ->first();
 
                 if ($existingDocument) {
@@ -588,7 +605,96 @@ class PpdbController extends Controller
                 } else if ($newFilePath) {
                     DokumenCalonSiswa::create([
                         'id_data_calon_siswa' => $calonSiswa->id,
-                        'id_dokumen' => $document->id,
+                        'dokumen_id' => $document->id,
+                        'document_type' => 'prestasi',
+                        'nama_dokumen' => $document->nama ?? '',
+                        'path_url' => $newFilePath
+                    ]);
+                }
+            }
+
+            $statusPendaftaran = StatusPendaftaran::where('id_data_calon_siswa', $calonSiswa->id)->first();
+
+            if ($statusPendaftaran && $statusPendaftaran->status == 'proses_seleksi') {
+                StatusPendaftaran::updateOrCreate([
+                    'id_data_calon_siswa' => $calonSiswa->id,
+                    'status' => 'proses_seleksi'
+                ]);
+            } else {
+                StatusPendaftaran::updateOrCreate([
+                    'id_data_calon_siswa' => $calonSiswa->id,
+                    'status' => 'pengecekan_berkas'
+                ]);
+
+                $recipient = Auth::user();
+
+                Notification::make()
+                    ->title('Saved successfully')
+                    ->sendToDatabase($recipient);
+            }
+
+            DB::commit();
+            return redirect()->route('ppdb-index')
+                ->with('success', 'Dokumen berhasil tersimpan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e->getMessage());
+            // Log::error('Error saving document', ['error' => $e->getMessage()]);
+            return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan dokumen.']);
+        }
+    }
+    public function saveDocumentAfirmasi(Request $request)
+    {
+        $calonSiswa = DataCalonSiswa::find($request->id_data_calon_siswa);
+
+        if (!$calonSiswa) {
+            return back()->withErrors(['error' => 'Data calon siswa tidak ditemukan.']);
+        }
+
+        $uploadedFiles = $request->file('files') ?? [];
+        $documents = DokumenAfirmasi::where('id_periode', $calonSiswa->id_periode)->get();
+
+        $errors = [];
+        foreach ($documents as $document) {
+            if ($document->isRequired && (!isset($uploadedFiles[$document->id]) || !$uploadedFiles[$document->id]->isValid())) {
+                $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
+                    ->where('dokumen_id', $document->id)
+                    ->first();
+
+                if (!$existingDocument) {
+                    $errors["files.{$document->id}"] = "Dokumen {$document->nama} wajib diunggah.";
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return back()->withErrors($errors)->withInput();
+        }
+
+        DB::beginTransaction();
+
+        try {
+            foreach ($documents as $document) {
+                $file = $uploadedFiles[$document->id] ?? null;
+                $newFilePath = null;
+
+                if ($file && $file->isValid()) {
+                    $newFilePath = $file->store('uploads/documents', 'public');
+                }
+
+                $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
+                    ->where('dokumen_id', $document->id)
+                    ->first();
+
+                if ($existingDocument) {
+                    $existingDocument->update([
+                        'path_url' => $newFilePath ?? $existingDocument->path_url
+                    ]);
+                } else if ($newFilePath) {
+                    DokumenCalonSiswa::create([
+                        'id_data_calon_siswa' => $calonSiswa->id,
+                        'dokumen_id' => $document->id,
+                        'document_type' => 'afirmasi',
                         'nama_dokumen' => $document->nama ?? '',
                         'path_url' => $newFilePath
                     ]);
@@ -624,90 +730,50 @@ class PpdbController extends Controller
             return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan dokumen.']);
         }
     }
-    public function saveDocumentAfirmasi(Request $request)
+
+    public function downloadUserPDF(Request $request)
     {
-        $calonSiswa = DataCalonSiswa::find($request->id_data_calon_siswa);
+        $id = $request->id_data_calon_siswa;
+        $dataCalonSiswa = DataCalonSiswa::find($id);
 
-        if (!$calonSiswa) {
-            return back()->withErrors(['error' => 'Data calon siswa tidak ditemukan.']);
-        }
+        $pdf = PDF::loadView('data-calon-siswa-id-pdf', [
+            'dataCalonSiswa' => $dataCalonSiswa
+        ]);
 
-        $uploadedFiles = $request->file('files') ?? [];
-        $documents = DokumenAfirmasi::where('id_periode', $calonSiswa->id_periode)->get();
+        return $pdf->download('data-calon-siswa-id-' . $dataCalonSiswa->user->name . '.pdf');
 
-        $errors = [];
-        foreach ($documents as $document) {
-            if ($document->isRequired && (!isset($uploadedFiles[$document->id]) || !$uploadedFiles[$document->id]->isValid())) {
-                $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
-                    ->first();
+        // return view('data-calon-siswa-id-pdf', compact('dataCalonSiswa'));
+    }
 
-                if (!$existingDocument) {
-                    $errors["files.{$document->id}"] = "Dokumen {$document->nama} wajib diunggah.";
-                }
-            }
-        }
+    public function downloadPDF()
+    {
+        // $periodeAktif = PeriodeDaftar::where('status', 1)->first();
+        // $dataCalonSiswa = DataCalonSiswa::whereHas('periode', fn($query) => $query->where('status', 1))
+        //     ->whereHas('statusPendaftaran', fn($query) => $query->where('status', 'diterima'))
+        //     ->get();
 
-        if (!empty($errors)) {
-            return back()->withErrors($errors)->withInput();
-        }
+        // $pdf = PDF::loadView('data-calon-siswa-pdf', [
+        //     'periodeAktif' => $periodeAktif,
+        //     'dataCalonSiswa' => $dataCalonSiswa
+        // ]);
+        // $periodeName = str_replace(['/', '\\'], '-', $periodeAktif->name);
 
-        DB::beginTransaction();
+        // // return $pdf->download('data-calon-siswa-periode-' . $periodeName . '.pdf');
+        // return view('data-calon-siswa-pdf', compact('periodeAktif', 'dataCalonSiswa'));
 
-        try {
-            foreach ($documents as $document) {
-                $file = $uploadedFiles[$document->id] ?? null;
-                $newFilePath = null;
 
-                if ($file && $file->isValid()) {
-                    $newFilePath = $file->store('uploads/documents', 'public');
-                }
+        $data = session('data_calon_siswa');
+        $dataCalonSiswa = $data->where('statusPendaftaran.status', 'diterima');
 
-                $existingDocument = DokumenCalonSiswa::where('id_data_calon_siswa', $calonSiswa->id)
-                    ->where('id_dokumen', $document->id)
-                    ->first();
+        $periodeName = session('periode');
+        $periodeName = str_replace(['/', '\\'], '-', $periodeName);
 
-                if ($existingDocument) {
-                    $existingDocument->update([
-                        'path_url' => $newFilePath ?? $existingDocument->path_url
-                    ]);
-                } else if ($newFilePath) {
-                    DokumenCalonSiswa::create([
-                        'id_data_calon_siswa' => $calonSiswa->id,
-                        'id_dokumen' => $document->id,
-                        'nama_dokumen' => $document->nama ?? '',
-                        'path_url' => $newFilePath
-                    ]);
-                }
-            }
+        $pdf = PDF::loadView('data-calon-siswa-pdf', [
+            'data' => $dataCalonSiswa,
+            'periodeName' => $periodeName
+        ]);
 
-            $statusPendaftaran = StatusPendaftaran::where('id_data_calon_siswa', $calonSiswa->id)->first();
-
-            if ($statusPendaftaran && $statusPendaftaran->status == 'proses_seleksi') {
-                StatusPendaftaran::updateOrCreate([
-                    'id_data_calon_siswa' => $calonSiswa->id,
-                    'status' => 'proses_seleksi'
-                ]);
-            } else {
-                StatusPendaftaran::updateOrCreate([
-                    'id_data_calon_siswa' => $calonSiswa->id,
-                    'status' => 'pengecekan_berkas'
-                ]);
-
-                $recipient = Auth::user();
-
-                Notification::make()
-                    ->title('Saved successfully')
-                    ->sendToDatabase($recipient);
-            }
-
-            DB::commit();
-            return redirect()->route('ppdb-index')
-                ->with('success', 'Dokumen berhasil tersimpan.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('Error saving document', ['error' => $e->getMessage()]);
-            return back()->withErrors(['error' => 'Terjadi kesalahan saat menyimpan dokumen.']);
-        }
+        return $pdf->download('data_siswa-diterima-' . $periodeName . '.pdf');
+        // return view('data-calon-siswa-pdf', compact('data', 'periodeName'));
     }
 }

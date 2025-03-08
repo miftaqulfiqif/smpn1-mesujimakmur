@@ -80,9 +80,9 @@
                         <div class="flex-1 w-64 text-white">
                             <p class="font-bold mb-2 text-2xl">{{ $prestasi->nama }}</p>
                             <p class="mb-10">
-                                {{ $prestasi->konten }}
+                                {!! Str::limit($prestasi->konten, 300) !!}
                             </p>
-                            <div class="flex items-center w-[40%]">
+                            <div class="flex items-center w-[40%] mt-8">
                                 <a
                                     href="{{ route('detail-content', ['content' => 'prestasi', 'id' => $prestasi->id]) }}">
                                     <p class="mr-4">Baca Selengkapnya</p>

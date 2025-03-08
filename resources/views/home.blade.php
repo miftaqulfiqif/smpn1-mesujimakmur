@@ -100,7 +100,7 @@
             </div>
             @if ($fotoSekolah)
                 <img src="{{ $fotoSekolah && $fotoSekolah->image ? asset('storage/' . $fotoSekolah->image) : asset('assets/images/Component 2.png') }}"
-                    alt="School Photo" class="max-h-fit">
+                    alt="School Photo" class="max-h-fit rounded-xl">
             @endif
         </div>
     </section>
@@ -208,8 +208,8 @@
                     <p class="underline">Lihat Semua </p>
                 </a>
             </div>
-            <div class="grid grid-cols-4 gap-10">
-                @if ($informasis);
+            <div class="grid grid-cols-4 gap-10 border mx-auto justify-center ">
+                @if ($informasis)
                     @foreach ($informasis as $index => $informasi)
                         <a href="{{ route('detail-content', ['content' => 'informasi', 'id' => $informasi->id]) }}">
                             <div

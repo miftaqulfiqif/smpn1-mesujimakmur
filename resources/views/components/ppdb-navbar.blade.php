@@ -1,4 +1,4 @@
-<nav class="w-full fixed bg-white flex px-3 md:px-10 z-40 lg:px-14 h-16 items-center justify-between shadow-md md:shadow-none"
+<div class="w-full fixed bg-white flex px-3 md:px-10 z-40 lg:px-14 h-16 items-center justify-between shadow-md md:shadow-none"
     id="navbar">
     <div class="dropdown md:hidden">
         <div tabindex="0" role="button" class="lg:hidden">
@@ -7,8 +7,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
         </div>
-        <img src="{{ $applogo ? asset('storage/' . $applogo->image_url) : asset('assets/images/logo-dikdasmen 1.png') }}"
-            alt="" srcset="" class="absolute h-20 mt-10 ml-10">
+
         <ul tabindex="0" class="menu menu-sm dropdown-content bg-white rounded-box z-[10] mt-3 w-52 p-2 shadow">
 
             <li><a href="/ppdb/index">Home</a></li>
@@ -35,8 +34,8 @@
         </ul>
     </div>
 
-    <img src="{{ asset('assets/images/logo-dikdasmen 1.png') }}" class="h-10 w-10 hidden md:block" alt=""
-        srcset="">
+    <img src="{{ $applogo ? asset('storage/' . $applogo->image_url) : asset('assets/images/logo-dikdasmen 1.png') }}"
+        alt="" srcset="" class="h-10 w-10 hidden md:block">
     <div class="flex space-x-16">
         <ul class="space-x-4 items-center hidden md:flex">
             {{-- <li><a href="{{ route('ppdb.index') }}"
@@ -100,4 +99,4 @@
             @csrf
         </form> --}}
     </div>
-</nav>
+</div>

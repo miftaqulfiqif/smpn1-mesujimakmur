@@ -122,7 +122,7 @@
 
                                 {{-- Tampilkan dokumen yang sudah diunggah --}}
                                 @php
-                                    $uploadedDocument = $data->where('id_dokumen', $document->id)->first();
+                                    $uploadedDocument = $data->where('dokumen_id', $document->id)->first();
                                 @endphp
                                 @if ($uploadedDocument && $uploadedDocument->path_url)
                                     <div class="mt-2 text-center">

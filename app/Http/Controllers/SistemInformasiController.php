@@ -23,7 +23,7 @@ class SistemInformasiController extends Controller
         $visi = Visi::latest()->first();
         $misi = Misi::all();
 
-        $prestasis = Prestasi::latest()->limit(7)->get();
+        $prestasis = Prestasi::latest()->limit(4)->get();
 
         $informasis = Informasi::latest()->limit(4)->get();
 

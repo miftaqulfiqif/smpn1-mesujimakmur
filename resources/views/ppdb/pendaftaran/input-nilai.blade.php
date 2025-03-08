@@ -119,6 +119,9 @@
                             <input type="text" id="semester_ganjil_kelas_4" name="semester_ganjil_kelas_4"
                                 value="{{ old('semester_ganjil_kelas_4', $data->semester_ganjil_kelas_4 ?? '') }}"
                                 class="input bg-white input-bordered w-full" required pattern="^\d+(\.\d+)?$">
+                            @error('semester_ganjil_kelas_4')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                         <li class="form-control gap-1">
                             <div class="flex">
@@ -131,6 +134,9 @@
                             <input type="text" id="semester_genap_kelas_4" name="semester_genap_kelas_4"
                                 value="{{ old('semester_genap_kelas_4', $data->semester_genap_kelas_4 ?? '') }}"
                                 class="input bg-white input-bordered w-full" required pattern="^\d+(\.\d+)?$">
+                            @error('semester_genap_kelas_4')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
 
@@ -147,6 +153,9 @@
                             <input type="text" id="semester_ganjil_kelas_5" name="semester_ganjil_kelas_5"
                                 value="{{ old('semester_ganjil_kelas_5', $data->semester_ganjil_kelas_5 ?? '') }}"
                                 class="input bg-white input-bordered w-full" required pattern="^\d+(\.\d+)?$">
+                            @error('semester_ganjil_kelas_5')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                         <li class="form-control gap-1">
                             <div class="flex">
@@ -159,6 +168,9 @@
                             <input type="text" id="semester_genap_kelas_5" name="semester_genap_kelas_5"
                                 value="{{ old('semester_genap_kelas_5', $data->semester_genap_kelas_5 ?? '') }}"
                                 class="input bg-white input-bordered w-full" required pattern="^\d+(\.\d+)?$">
+                            @error('semester_genap_kelas_5')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
 
@@ -175,6 +187,9 @@
                             <input type="text" id="semester_ganjil_kelas_6" name="semester_ganjil_kelas_6"
                                 value="{{ old('semester_ganjil_kelas_6', $data->semester_ganjil_kelas_6 ?? '') }}"
                                 class="input bg-white input-bordered w-full" required pattern="^\d+(\.\d+)?$">
+                            @error('semester_ganjil_kelas_6')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
                     <div class="flex justify-center gap-2 mt-5">
@@ -185,12 +200,8 @@
                                 class="btn px-10 bg-slate-950 text-white mt-4">Selanjutnya</button>
                         </li>
                     </div>
-
                 </form>
             </ul>
-
-
-
         </div>
     </section>
 @endsection

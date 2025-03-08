@@ -79,6 +79,9 @@ Route::get('/tes-notif', function () {
     }
 });
 
+Route::get('/data-calon-siswa/pdf', [PpdbController::class, 'downloadPDF'])->name('data-calon-siswa.pdf');
+Route::post('/data-calon-siswa-id/pdf', [PpdbController::class, 'downloadUserPDF'])->name('data-calon-siswa-id.pdf');
+
 Route::get('/logout', function () {
     Auth::logout();
     return redirect('/login');

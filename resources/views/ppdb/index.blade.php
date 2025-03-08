@@ -18,8 +18,6 @@
             </div>
         @endif
 
-
-
         <div class="my-5">
             <p>Selamat Datang</p>
             <p class="text-3xl font-bold">{{ $namaSiswa }}</p>
@@ -85,9 +83,13 @@
                     @elseif ($statusPendaftaran->status == 'diterima')
                         <p class="text-lg bg-[#5cff3b65] px-4 py-2 rounded-2xl max-w-fit">Selamat Anda Diterima</p>
                         <p class="mt-4">Silahkan melakukan daftar ulang dengan datang ke Sekolah SMPN 1 Mesuji Makmur</p>
-                        {{-- <a href="#">
-                            <p class="text-sm bg-blue-500 text-white px-3 py-2 rounded-2xl max-w-fit">Bayar Daftar Ulang</p>
-                        </a> --}}
+                        <form action="{{ route('data-calon-siswa-id.pdf') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="id_data_calon_siswa" value="{{ $dataCalonSiswa->id }}">
+                            <button type="submit"
+                                class="text-sm bg-blue-500 text-white px-3 py-2 rounded-2xl max-w-fit">Cetak Bukti
+                                Pendaftaran</button>
+                        </form>
                     @elseif ($statusPendaftaran->status == 'ditolak')
                         <p class="text-lg bg-[#fa000485] px-4 py-2 rounded-2xl max-w-fit">Maaf, Anda belum di terima</p>
                         <p class="mt-4">Tetap Semangat dan Jangan Putus Asa </p>

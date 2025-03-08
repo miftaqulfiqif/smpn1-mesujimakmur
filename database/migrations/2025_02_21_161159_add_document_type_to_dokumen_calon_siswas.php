@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('misi', function (Blueprint $table) {
-            $table->id();
-            $table->string('editor');
-            $table->text('konten')->change();
-            $table->timestamps();
+        Schema::table('dokumen_calon_siswas', function (Blueprint $table) {
+            $table->string('document_type')->nullable();
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('misi');
+        Schema::table('dokumen_calon_siswas', function (Blueprint $table) {
+            $table->dropColumn('document_type');
+        });
     }
 };

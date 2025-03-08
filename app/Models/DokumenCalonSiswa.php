@@ -10,7 +10,8 @@ class DokumenCalonSiswa extends Model
 
     protected $fillable = [
         'id_data_calon_siswa',
-        'id_dokumen',
+        'dokumen_id',
+        'document_type',
         'nama_dokumen',
         'path_url',
     ];

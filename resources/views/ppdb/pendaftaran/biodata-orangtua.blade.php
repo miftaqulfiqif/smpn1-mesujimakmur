@@ -133,6 +133,9 @@
                                     value="{{ old('nama_ayah', $biodataOrangtua->nama_ayah ?? '') }}"
                                     placeholder="Masukkan Nama Ayah" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('nama_ayah')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -145,6 +148,9 @@
                                     value="{{ old('nik_ayah', $biodataOrangtua->nik_ayah ?? '') }}"
                                     placeholder="Masukkan NIK Ayah" class="input bg-white input-bordered w-full"
                                     maxlength="16">
+                                @error('nik_ayah')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -169,6 +175,9 @@
                                     value="{{ old('pendidikan_ayah', $biodataOrangtua->pendidikan_ayah ?? '') }}"
                                     placeholder="Masukkan Pendidikan Terakhir Ayah"
                                     class="input bg-white input-bordered w-full" maxlength="255">
+                                @error('pendidikan_ayah')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -181,6 +190,9 @@
                                     value="{{ old('pekerjaan_ayah', $biodataOrangtua->pekerjaan_ayah ?? '') }}"
                                     placeholder="Masukkan Pekerjaan Ayah" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('pekerjaan_ayah')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -193,6 +205,9 @@
                                     value="{{ old('penghasilan_ayah', $biodataOrangtua->penghasilan_ayah ?? '') }}"
                                     placeholder="Masukkan Penghasilan Ayah" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('penghasilan_ayah')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                         </div>
                         <div class="w-full">
@@ -207,6 +222,9 @@
                                     value="{{ old('nama_ibu', $biodataOrangtua->nama_ibu ?? '') }}"
                                     placeholder="Masukkan Nama ibu" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('nama_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -219,6 +237,9 @@
                                     value="{{ old('nik_ibu', $biodataOrangtua->nik_ibu ?? '') }}"
                                     placeholder="Masukkan NIK ibu" class="input bg-white input-bordered w-full"
                                     maxlength="16">
+                                @error('nik_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -230,6 +251,9 @@
                                 <input type="date" id="tgl_lahir_ibu" name="tgl_lahir_ibu"
                                     value="{{ old('tgl_lahir_ibu', $biodataOrangtua->tgl_lahir_ibu ?? '') }}"
                                     placeholder="Pilih Tanggal Lahir" class="input bg-white input-bordered w-full">
+                                @error('tgl_lahir_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -242,6 +266,9 @@
                                     value="{{ old('pendidikan_ibu', $biodataOrangtua->pendidikan_ibu ?? '') }}"
                                     placeholder="Masukkan Pendidikan Terakhir Ibu"
                                     class="input bg-white input-bordered w-full" maxlength="255">
+                                @error('pendidikan_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -254,6 +281,9 @@
                                     value="{{ old('pekerjaan_ibu', $biodataOrangtua->pekerjaan_ibu ?? '') }}"
                                     placeholder="Masukkan Pekerjaan ibu" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('pekerjaaan_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control gap-1">
                                 <div class="flex">
@@ -266,6 +296,9 @@
                                     value="{{ old('penghasilan_ibu', $biodataOrangtua->penghasilan_ibu ?? '') }}"
                                     placeholder="Masukkan Penghasilan Ibu" class="input bg-white input-bordered w-full"
                                     maxlength="255">
+                                @error('penghasilan_ibu')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                         </div>
                     </div>

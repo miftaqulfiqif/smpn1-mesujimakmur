@@ -43,7 +43,7 @@
                     <p class="text-3xl font-bold mb-4 font-[#2E073F]">{{ $newActivity->nama }}</p>
                     <p class="font-semibold mb-4">{{ $newActivity->editor }}</p>
                     <p>
-                        {{ $newActivity->deskripsi }}
+                        {!! Str::limit($newActivity->deskripsi, 600) !!}
                     </p>
                     <div class="absolute flex items-center bottom-0">
                         <a href="{{ route('detail-content', ['content' => 'kegiatan', 'id' => $newActivity->id]) }}">
@@ -84,7 +84,7 @@
                                     <p class="font-bold text-xl py-2">{{ $activity->nama }}</p>
                                     <p class="font-semibold text-sm pb-2">{{ $activity->editor }}</p>
                                     <p class="text-sm mb-8">
-                                        {{ $activity->deskripsi }}
+                                        {!! Str::limit($activity->deskripsi, 255) !!}
                                     </p>
                                 </div>
                             </div>

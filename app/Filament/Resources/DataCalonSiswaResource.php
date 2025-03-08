@@ -2,24 +2,28 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Forms;
+use Filament\Tables;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use Filament\Actions\Action;
+use App\Models\PeriodeDaftar;
+use App\Models\DataCalonSiswa;
+use App\Models\DokumenPrestasi;
+use Barryvdh\DomPDF\Facade\PDF;
+use Filament\Resources\Resource;
+use App\Models\DokumenCalonSiswa;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Repeater;
+use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\View\TablesRenderHook;
+use Illuminate\Validation\ConditionalRules;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use App\Filament\Resources\DataCalonSiswaResource\Pages;
 use App\Filament\Resources\DataCalonSiswaResource\RelationManagers;
-use App\Models\DataCalonSiswa;
-use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
-use Filament\Tables;
-use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\DataCalonSiswaResource\RelationManagers\DataOrangtuaRelationManager;
 use App\Filament\Resources\DataOrangtuaResource\RelationManagers\DataOrangtuaRelationManager as RelationManagersDataOrangtuaRelationManager;
-use App\Models\DokumenCalonSiswa;
-use App\Models\DokumenPrestasi;
-use Filament\Forms\Components\Repeater;
-use Filament\Tables\View\TablesRenderHook;
-use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Validation\ConditionalRules;
 
 class DataCalonSiswaResource extends Resource
 {
@@ -31,6 +35,7 @@ class DataCalonSiswaResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $jalur = $form->getRecord()->user->jalur;
         return $form
             ->schema([
                 Forms\Components\Section::make()->columns(2)->schema([
@@ -208,7 +213,10 @@ class DataCalonSiswaResource extends Resource
                 ]),
                 Forms\Components\Section::make()->schema([
                     Forms\Components\Repeater::make('Dokumen Persyaratan')
-                        ->relationship('dokumenCalonSiswa')
+                        ->relationship(
+                            name: 'dokumenCalonSiswa',
+                            modifyQueryUsing: fn($query) => $query->where('document_type', $jalur)
+                        )
                         ->columns(2)
                         ->schema([
                             Forms\Components\TextInput::make('nama_dokumen')
@@ -299,16 +307,20 @@ class DataCalonSiswaResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([])
+            ->filters([
+                \Filament\Tables\Filters\SelectFilter::make('periode')
+                    ->relationship('periode', 'name')
+                    ->label('Tahun Ajaran'),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->label('Update Status')
                     ->icon('heroicon-s-pencil'),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                ]),
+                // Tables\Actions\BulkActionGroup::make([
+                //     Tables\Actions\DeleteBulkAction::make(),
+                // ]),
             ]);
     }
 
@@ -327,6 +339,11 @@ class DataCalonSiswaResource extends Resource
             'view' => Pages\ViewDataCalonSiswa::route('/{record}'),
             'edit' => Pages\EditDataCalonSiswa::route('/{record}/edit'),
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     private function getRepeaterSchema($relationshipName)

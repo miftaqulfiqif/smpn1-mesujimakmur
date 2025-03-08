@@ -152,12 +152,11 @@
                         <li class="form-control gap-1 w-full">
                             <div class="flex">
                                 <label for="name" class="label font-medium">Nama Lengkap</label>
-
                             </div>
                             <input type="text" id="name" name="name" value="{{ $user->name }}"
                                 class="input bg-white input-bordered w-full" required maxlength="255">
                             @error('name')
-                                <p class="text-sm text-red-500">*</p>
+                                <p class="text-sm text-red-500">{{ $message }}</p>
                             @enderror
                         </li>
                         <li class="form-control gap-1 lg:w-1/2">
@@ -177,6 +176,9 @@
                                     {{ old('jenis_kelamin', $biodata->jenis_kelamin ?? '') == 'Perempuan' ? 'selected' : '' }}>
                                     Perempuan</option>
                             </select>
+                            @error('jenis_kelamin')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
                     <div class="lg:flex gap-4">
@@ -190,6 +192,9 @@
                             <input type="text" id="nik" name="nik"
                                 value="{{ old('nik', $biodata->nik ?? '') }}" placeholder="Masukkan NIK"
                                 class="input bg-white input-bordered w-full" maxlength="16">
+                            @error('nik')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
 
                         </li>
                         <li class="form-control gap-1 lg:w-1/4">
@@ -202,6 +207,9 @@
                             <input type="text" id="tempat_lahir" name="tempat_lahir"
                                 value="{{ old('tempat_lahir', $biodata->tempat_lahir ?? '') }}"
                                 placeholder="Masukkan Tempat Lahir" class="input bg-white input-bordered w-full">
+                            @error('tempat_lahir')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                         <li class="form-control gap-1 lg:w-1/4">
                             <div class="flex">
@@ -213,6 +221,9 @@
                             <input type="date" id="tgl_lahir" name="tgl_lahir"
                                 value="{{ old('tgl_lahir', $biodata->tgl_lahir ?? '') }}"
                                 placeholder="Pilih Tanggal Lahir" class="input bg-white input-bordered w-full">
+                            @error('tgl_lahir')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
 
@@ -226,7 +237,9 @@
                         <input type="text" id="alamat" name="alamat"
                             value="{{ old('alamat', $biodata->alamat ?? '') }}" placeholder="Masukkan alamat Lengkap"
                             class="input bg-white input-bordered w-full">
-
+                        @error('alamat')
+                            <p class="text-sm text-red-500">{{ $message }}</p>
+                        @enderror
                     </li>
 
                     <div class="lg:flex gap-4">
@@ -246,6 +259,9 @@
                                     {{ old('penerima_kip', $biodata->penerima_kip ?? '') == 0 ? 'selected' : '' }}>Tidak
                                 </option>
                             </select>
+                            @error('penerima_kip')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
 
                         <li class="form-control gap-1 w-full" id="kip_section" style="display: none;">
@@ -258,6 +274,9 @@
                             <input type="text" id="no_kip" name="nomor_kip"
                                 value="{{ old('no_kip', $biodata->no_kip ?? '') }}" placeholder="Masukkan Nomor KIP"
                                 class="input bg-white input-bordered w-full">
+                            @error('no_kip')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
 
@@ -280,6 +299,9 @@
                                 @endif
 
                             </select>
+                            @error('asal_sekolah')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
 
                         <div class="flex gap-4 lg:w-1/2">
@@ -294,6 +316,9 @@
                                 <input type="text" id="tinggi_badan" name="tinggi_badan"
                                     value="{{ old('tinggi_badan', $biodata->tinggi_badan ?? '') }}"
                                     placeholder="Masukkan Tinggi Badan" class="input bg-white input-bordered w-full">
+                                @error('tinggi_badan')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                             <li class="form-control flex-1 gap-1">
                                 <div class="flex">
@@ -306,7 +331,9 @@
                                 <input type="text" id="berat_badan" name="berat_badan"
                                     value="{{ old('berat_badan', $biodata->berat_badan ?? '') }}"
                                     placeholder="Masukkan Berat Badan" class="input bg-white input-bordered w-full">
-
+                                @error('berat_badan')
+                                    <p class="text-sm text-red-500">{{ $message }}</p>
+                                @enderror
                             </li>
                         </div>
                     </div>
@@ -323,6 +350,9 @@
                             <input type="text" id="kegemaran" name="kegemaran"
                                 value="{{ old('kegemaran', $biodata->kegemaran ?? '') }}"
                                 placeholder="Masukkan Kegemaran atau Hobi" class="input bg-white input-bordered w-full">
+                            @error('kegemaran')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                         <li class="form-control gap-1 lg:w-1/2">
                             <div class="flex">
@@ -334,6 +364,9 @@
                             <input type="text" id="notelp" name="notelp"
                                 value="{{ old('notelp', $biodata->notelp ?? '') }}" placeholder="Masukkan Nomor Telepon"
                                 class="input bg-white input-bordered w-full">
+                            @error('notelp')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                     </div>
 
@@ -362,6 +395,9 @@
                                 <p id="selectedFileName" class="text-xs font-medium text-gray-400 mt-2"></p>
                                 <p class="text-xs font-medium text-gray-400 mt-2">PNG, JPG and JPEG are Allowed.</p>
                             </label>
+                            @error('foto')
+                                <p class="text-sm text-red-500">{{ $message }}</p>
+                            @enderror
                         </li>
                         <div id="imagePreview" class="mt-4">
                             @if ($biodata && $biodata->foto)

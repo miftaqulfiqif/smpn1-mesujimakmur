@@ -9,5 +9,4 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateDataCalonSiswa extends CreateRecord
 {
     protected static string $resource = DataCalonSiswaResource::class;
-    
 }
