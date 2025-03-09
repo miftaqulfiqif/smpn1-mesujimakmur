@@ -59,6 +59,11 @@
                         class="px-3 h-8 rounded-md flex items-center shadow hover:shadow-md {{ Route::currentRouteNamed('rangking-siswa-prestasi') ? 'bg-[#7A1CAC] text-white' : 'bg-white text-[#7A1CAC]' }}">Cek
                         Peringkat Prestasi</a>
                 </li>
+            @elseif (Auth::user()->jalur == 'pindahan_tugas_ortu')
+                <li><a href="/ppdb/peringkat-pindahan-tugas-ortu"
+                        class="px-3 h-8 rounded-md flex items-center shadow hover:shadow-md {{ Route::currentRouteNamed('rangking-siswa-prestasi') ? 'bg-[#7A1CAC] text-white' : 'bg-white text-[#7A1CAC]' }}">Cek
+                        Peringkat</a>
+                </li>
             @elseif (Auth::user()->jalur == 'afirmasi')
                 <li><a href="/ppdb/peringkat-afirmasi"
                         class="px-3 h-8 rounded-md flex items-center shadow hover:shadow-md {{ Route::currentRouteNamed('rangking-siswa-prestasi') ? 'bg-[#7A1CAC] text-white' : 'bg-white text-[#7A1CAC]' }}">Cek

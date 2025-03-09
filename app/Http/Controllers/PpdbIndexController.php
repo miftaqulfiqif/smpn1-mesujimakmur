@@ -43,6 +43,9 @@ class PpdbIndexController extends Controller
 
         $namaSiswa = $user->name;
         $jalurSiswa = $user->jalur;
+        if ($jalurSiswa == 'pindahan_tugas_ortu') {
+            $jalurSiswa = 'Pindahan Tugas Ortu';
+        }
 
         $periodeDaftar = PeriodeDaftar::where('id', $dataCalonSiswa->id_periode)->first();
 

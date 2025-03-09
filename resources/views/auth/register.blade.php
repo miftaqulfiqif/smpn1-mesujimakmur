@@ -55,6 +55,7 @@
                     <option value="zonasi">Zonasi</option>
                     <option value="prestasi">Prestasi</option>
                     <option value="afirmasi">Afirmasi</option>
+                    <option value="pindahan_tugas_ortu">Pindahan Tugas Ortu</option>
                 </select>
                 @error('jalur')
                     <span class="text-red-500 text-sm">{{ $message }}</span>

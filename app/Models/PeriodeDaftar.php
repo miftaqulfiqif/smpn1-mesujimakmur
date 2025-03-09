@@ -37,6 +37,10 @@ class PeriodeDaftar extends Model
     {
         return $this->hasMany(DokumenAfirmasi::class, 'id_periode');
     }
+    public function dokumensPindahan()
+    {
+        return $this->hasMany(DokumenPindahan::class, 'id_periode');
+    }
 
     public function siswas()
     {

@@ -157,6 +157,31 @@ class PeriodeDaftarResource extends Resource
                             ])
                     ])
                 ]),
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\Repeater::make('Dokumen pindahan')->relationship('dokumensPindahan')->addActionLabel('Tambah dokumen')->columns(2)->schema([
+                        Forms\Components\TextInput::make('nama')
+                            ->required()
+                            ->placeholder('Contoh: SCAN PDF Ijazah Asli')
+                            ->label('Nama dokumen'),
+                        Forms\Components\ToggleButtons::make('isRequired')
+                            ->required()
+                            ->label('Wajib diisi?')
+                            ->inline()
+                            ->default(1)
+                            ->options([
+                                1 => 'Ya',
+                                0 => 'Tidak',
+                            ])
+                            ->colors([
+                                1 => 'success',
+                                0 => 'danger',
+                            ])
+                            ->icons([
+                                1 => 'heroicon-o-check-circle',
+                                0 => 'heroicon-o-x-circle',
+                            ])
+                    ])
+                ]),
 
             ]);
     }

@@ -52,9 +52,11 @@ Route::post('/ppdb/input-nilai', [PpdbController::class, 'saveNilai'])->name('sa
 Route::get('/ppdb/upload-document', [PpdbController::class, 'showFormUploadDocument'])->name('upload-document');
 Route::get('/ppdb/upload-document-prestasi', [PpdbController::class, 'showFormUploadDocumentPrestasi'])->name('upload-document-prestasi');
 Route::get('/ppdb/upload-document-afirmasi', [PpdbController::class, 'showFormUploadDocumentAfirmasi'])->name('upload-document-afirmasi');
+Route::get('/ppdb/upload-document-pindahan-tugas-ortu', [PpdbController::class, 'showFormUploadDocumentPindahan'])->name('upload-document-pindahan-tugas-ortu');
 Route::post('/ppdb/upload-document', [PpdbController::class, 'saveDocument'])->name('save-document');
 Route::post('/ppdb/upload-document-prestasi', [PpdbController::class, 'saveDocumentPrestasi'])->name('save-document-prestasi');
 Route::post('/ppdb/upload-document-afirmasi', [PpdbController::class, 'saveDocumentAfirmasi'])->name('save-document-afirmasi');
+Route::post('/ppdb/upload-document-pindahan-tugas-ortu', [PpdbController::class, 'saveDocumentPindahan'])->name('save-document-pindahan-tugas-ortu');
 Route::post('/ppdb/daftar', [PpdbController::class, 'saveBiodataSiswa'])->name('saveBiodataSiswa');
 
 // ROUTE PPDB INDEX
